@@ -23,6 +23,11 @@ def list_files(query: str, tags: list[str]) -> list[File]:
             link="https://example.com/file2",
             tags=["tag1", "tag2"]
         ),
+        File(
+            name="file3",
+            link="https://example.com/file3",
+            tags=["tag1", "tag2"]
+        ),
     ]
 
 
