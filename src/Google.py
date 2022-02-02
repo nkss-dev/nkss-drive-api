@@ -4,7 +4,6 @@ from google.auth.transport.requests import Request
 from google.oauth2.credentials import Credentials
 from google_auth_oauthlib.flow import InstalledAppFlow
 from googleapiclient.discovery import build
-from googleapiclient.errors import HttpError
 
 
 def connect_to_drive(CLIENT_CREDENTIALS, SCOPES):
@@ -14,13 +13,14 @@ def connect_to_drive(CLIENT_CREDENTIALS, SCOPES):
     # time.
     if os.path.exists('token.json'):
         creds = Credentials.from_authorized_user_file('token.json', SCOPES)
-    # If there are no (valid) credentials available, let the user log in.
+    # If there are no (valid) credentials available, 
+    # let the user log in using the brower
     if not creds or not creds.valid:
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
             flow = InstalledAppFlow.from_client_secrets_file(CLIENT_CREDENTIALS, SCOPES)
-            # set the port below to be the same as you redirect upi in gc console
+            # set the port below to be the same as you redirect uri in gc console
             creds = flow.run_local_server(port=8080)
         # Save the credentials for the next run
         with open('token.json', 'w') as token:

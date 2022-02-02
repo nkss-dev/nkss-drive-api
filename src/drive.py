@@ -1,7 +1,7 @@
 # import db
 from Google import connect_to_drive
 import pandas as pd
-import json
+import db
 
 
 def get_folder_contents(service, id):
@@ -14,7 +14,7 @@ def get_folder_contents(service, id):
     response = service.files().list(q=query).execute()
     files = response.get('files', [])
     nextPageToken = response.get('nextPageToken')
-    
+
     while nextPageToken:
         response = service.files().list(q=query, pageToken=nextPageToken).execute()
         files.extend(response.get('files'))
@@ -25,7 +25,7 @@ def get_folder_contents(service, id):
 
 def list_drive(service, folder_id, result, parentName='', grandParentName=''):
     files = get_folder_contents(service, folder_id)
-    
+
     for item in files:
         if item['mimeType'] != 'application/vnd.google-apps.folder':
             try:
@@ -39,13 +39,12 @@ def list_drive(service, folder_id, result, parentName='', grandParentName=''):
                 print("Error: ", error)
 
     for item in files:
-        # parentName = 'General'
+
         if item['mimeType'] == 'application/vnd.google-apps.folder':
             if parentName != 'General':
                 grandParentName = parentName
             parentName = item['name']
             folder_id = item['id']
-            # contents = get_folder_contents(service, folder_id)
             try:
                 list_drive(service, folder_id, result,
                            parentName, grandParentName)
@@ -54,8 +53,6 @@ def list_drive(service, folder_id, result, parentName='', grandParentName=''):
 
 
 def main():
-    # TODO: query the drive and add files to the database
-    # call db.add_files() to add files to the database
 
     folder_id = '1U2taK5kEhOiUJi70ZkU2aBWY83uVuMmD'
     CLIENT_SECRET_FILE = '../credentials.json'
@@ -66,12 +63,15 @@ def main():
         exit()
 
     print("Drive Connected!")
-    result = []
-    list_drive(service, folder_id, result, 'General', '')
-    files = pd.DataFrame(result)
-    print(files)
-    files.to_excel("links.xlsx")
 
+    result = []
+
+    list_drive(service, folder_id, result, 'General', '')
+
+    files = pd.DataFrame(result)
+    # print(files)
+    files.to_excel("links.xlsx")
+    db.add_files(result)
     pass
 
 
