@@ -30,12 +30,15 @@ for i in range(len(x.index)):
         if "reference book" in tl:
             newtag.append("kind:book")
             typicalAncestors.append(t)
+            break
         elif "note" in tl:
             newtag.append("kind:notes")
             typicalAncestors.append(t)
+            break
         elif "ppt" in tl:
             newtag.append("kind:lecture-ppt")
             typicalAncestors.append(t)
+            break
     
     if mime in pptmimeList and "kind:lecture-ppt" not in newtag:
         newtag.append("kind:lecture-ppt")
