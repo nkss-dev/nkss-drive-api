@@ -7,6 +7,8 @@ pptmimeList = ["application/vnd.ms-powerpoint","application/vnd.openxmlformats-o
 
 outfile = open("links.json","w")
 
+data = []
+
 for i in range(len(x.index)):
     
     id = x.loc[i]["id"]
@@ -14,7 +16,7 @@ for i in range(len(x.index)):
     mime = x.loc[i]["mimeType"]
     tag = json.loads(x.loc[i]["tags"].replace("'",'"'))
 
-    newEntry = [ID, name, mime, tag]
+    newEntry = [id, name, mime, tag]
     newtag = []
 
     typicalAncestors = []
@@ -48,7 +50,7 @@ for i in range(len(x.index)):
             newtag.append("other:"+t)
 
     newEntry[-1] = newtag
-    outfile.write(json.dumps(newEntry))
-    outfile.write("\n")
+    data.append(newEntry)
 
+outfile.write(json.dumps(data))
 outfile.close()
