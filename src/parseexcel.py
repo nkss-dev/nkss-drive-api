@@ -34,12 +34,7 @@ for i in range(len(x.index)):
         typicalAncestors.append("Notes")
     
     if mime in pptmimeList:
-        print(ID,name,mime)
         newtag.append("kind:lecture-ppt")
-    try:
-        tag = json.loads(tag + "\n")
-    except:
-        pass
     
     for t in tag:
         if t not in typicalAncestors and t:
