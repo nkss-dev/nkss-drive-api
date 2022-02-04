@@ -9,7 +9,7 @@ outfile = open("links.json","w")
 
 for i in range(len(x.index)):
     
-    ID = x.loc[i]["id"]
+    id = x.loc[i]["id"]
     name = x.loc[i]["name"]
     mime = x.loc[i]["mimeType"]
     tag = json.loads(x.loc[i]["tags"].replace("'",'"'))
@@ -21,7 +21,7 @@ for i in range(len(x.index)):
     for c in coursecodes:
         for t in tag:
             if c in t:
-                typicalAncestors += [t]
+                typicalAncestors.append(t)
                 if "course:" + c not in newtag:
                     newtag.append("course:" + c)
 
