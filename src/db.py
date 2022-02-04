@@ -7,7 +7,7 @@ class File:
     tags: list[str]
 
 
-def list_files(query: str, tags: list[str]) -> list[File]:
+def list_files(tags: list[str]) -> list[File]:
     """
     List files in database that match query and tags.
     """
@@ -21,12 +21,12 @@ def list_files(query: str, tags: list[str]) -> list[File]:
         File(
             name="file2",
             link="https://example.com/file2",
-            tags=["tag1", "tag2"]
+            tags=["tag2", "tag3"]
         ),
         File(
             name="file3",
             link="https://example.com/file3",
-            tags=["tag1", "tag2"]
+            tags=["tag3", "tag4"]
         ),
     ]
 
