@@ -12,9 +12,10 @@ class File:
 
 def list_files(tags: list[str]) -> list[File]:
     """
-    List files in database that match query and tags.
+    List files in database that have the tags.
     """
     # TODO: query from db
+
     return [
         File(
             name="file1",
@@ -39,6 +40,7 @@ def add_files(files: list[File]):
     Add files to database.
     """
     # TODO: add to db
+    
     pass
 
 
