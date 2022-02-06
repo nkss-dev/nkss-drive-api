@@ -6,7 +6,7 @@ import db
 
 def get_folder_contents(service, id):
 
-    query = f"parents = '{id}'"
+    query = f"'{id}' in parents"
     if not service:
         print("Connection failed")
         return []
@@ -30,7 +30,7 @@ def list_drive(service, folder_id, result, parentName='', grandParentName=''):
         if item['mimeType'] != 'application/vnd.google-apps.folder':
             try:
                 id = item['id']
-                link = (service.files().get(fileId=id, fields='webViewLink').execute())[
+                link = (service.files().get(fileId=id).execute())[
                     'webViewLink']
                 item['tags'] = [parentName, grandParentName]
                 item['drive_url'] = link
@@ -55,7 +55,7 @@ def list_drive(service, folder_id, result, parentName='', grandParentName=''):
 def main():
 
     folder_id = '1U2taK5kEhOiUJi70ZkU2aBWY83uVuMmD'
-    CLIENT_SECRET_FILE = '../credentials.json'
+    CLIENT_SECRET_FILE = './credentials.json'
     SCOPES = ['https://www.googleapis.com/auth/drive']
     service = connect_to_drive(CLIENT_SECRET_FILE, SCOPES)
     if not service:
