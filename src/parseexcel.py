@@ -1,12 +1,15 @@
 import pandas, json
-x = pandas.read_excel("links.xlsx")
+from os import path
 
-with open("courses.json") as f:
+x = pandas.read_excel("data/links.xlsx")
+
+courses = path.join(path.dirname(path.realpath(__file__)), "courses.json")
+with open(courses) as f:
     coursecodes = json.loads(f.read())
 
 pptmimeList = ["application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation"]
 
-outfile = open("links.json","w")
+outfile = open("data/links.json","w")
 
 data = []
 
