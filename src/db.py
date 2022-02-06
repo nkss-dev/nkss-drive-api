@@ -1,10 +1,4 @@
 
-import sqlite3
-from dataclasses import dataclass
-
-
-# queries to create the db tables
-
 
 @dataclass
 class File:
@@ -15,7 +9,7 @@ class File:
 
 def list_files(tags: list[str]) -> list[File]:
     """
-    List files in database that match query (a simple search box query) and tags.
+    List files in database that have the tags.
     """
     # TODO: query from db
 
