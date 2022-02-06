@@ -1,4 +1,7 @@
 from dataclasses import dataclass
+import os
+import sqlite3
+
 
 @dataclass
 class File:
@@ -37,3 +40,20 @@ def add_files(files: list[File]):
     """
     # TODO: add to db
     pass
+
+
+_conn: sqlite3.Connection
+_cur: sqlite3.Cursor
+
+
+def connect(db_path: str):
+    global _conn, _cur
+
+    self_path = os.path.dirname(os.path.realpath(__file__))
+    schema = os.path.join(self_path, "schema.sql")
+
+    _conn = sqlite3.connect(db_path)
+    _cur = _conn.cursor()
+    with open(schema, "r") as f:
+        _cur.executescript(f.read())
+        _conn.commit()

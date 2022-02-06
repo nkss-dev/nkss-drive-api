@@ -2,6 +2,7 @@ from flask import Flask, jsonify, request
 import db
 
 app = Flask(__name__)
+db.connect("./data/db.sqlite3")
 
 @app.route('/files', methods=['GET'])
 def files():
