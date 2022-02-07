@@ -1,11 +1,11 @@
 create table if not exists files(
-  fid         int auto_increment primary key,
+  fid         INTEGER primary key AUTOINCREMENT,
   name        text not null,
   drive_url   text not null
 );
 
 create table if not exists tags(
-  tid         int primary key,
+  tid         INTEGER primary key AUTOINCREMENT,
   name        text not null
 );
 
