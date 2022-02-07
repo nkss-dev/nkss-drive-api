@@ -39,9 +39,37 @@ def add_files(files: list[File]):
     """
     Add files to database.
     """
-    # TODO: add to db
+    
+    for file in files:
+        query1 = "INSERT INTO files(name, drive_url) VALUES (?,?) RETURNING fid"
+        _cur.execute(query1, [file.name, file.link])
+        fid = _cur.fetchone()[0]
+
+        for tag in file.tags:
+            tid = get_tagid_or_insert(tag)
+            query2 = "INSERT INTO file_tags(tid,fid) VALUES (?,?)" 
+            _cur.execute(query2, [tid, fid])
+
+
+    _conn.commit()
     
     pass
+
+def get_tagid_or_insert(tag:str) -> int:
+    query = "SELECT tid FROM tags WHERE name = ?"
+    _cur.execute(query, [tag])
+    tid = _cur.fetchone()
+    if tid is None:
+        query = "INSERT INTO tags(name) VALUES (?) RETURNING tid"
+        _cur.execute(query, [tag])
+        tid = _cur.fetchone()[0]
+    else:
+        tid = tid[0]
+
+    _conn.commit()  
+
+    return tid  
+
 
 
 _conn: sqlite3.Connection
@@ -58,4 +86,4 @@ def connect(db_path: str):
     _cur = _conn.cursor()
     with open(schema, "r") as f:
         _cur.executescript(f.read())
-        _conn.commit()
+        _conn.commit()        
