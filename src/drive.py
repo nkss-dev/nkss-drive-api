@@ -24,7 +24,7 @@ def get_folder_contents(service, id):
 
 
 def list_drive(service, folder_id, result, parents = None):
-    if parents == None:
+    if parents is None:
         parents = []
 
     files = get_folder_contents(service, folder_id)
