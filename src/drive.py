@@ -23,14 +23,16 @@ def get_folder_contents(service, id):
     return files
 
 
-def list_drive(service, folder_id, result, parentName='', grandParentName=''):
+def list_drive(service, folder_id, result, parents = None):
+    if parents == None:
+        parents = []
+
     files = get_folder_contents(service, folder_id)
 
     for item in files:
         if item['mimeType'] != 'application/vnd.google-apps.folder':
             try:
-                id = item['id']
-                item['tags'] = [parentName, grandParentName]
+                item['tags'] = list(parents)
                 result.append(item)
             except Exception as error:
                 print("Error: ", error)
@@ -38,15 +40,14 @@ def list_drive(service, folder_id, result, parentName='', grandParentName=''):
     for item in files:
 
         if item['mimeType'] == 'application/vnd.google-apps.folder':
-            if parentName != 'General':
-                grandParentName = parentName
-            parentName = item['name']
+            parents.append(item['name'])
             folder_id = item['id']
             try:
                 list_drive(service, folder_id, result,
-                           parentName, grandParentName)
+                           parents)
             except Exception as error:
                 print("Error: ", error)
+            parents.pop()
 
 
 def main():
@@ -63,7 +64,7 @@ def main():
 
     result = []
 
-    list_drive(service, folder_id, result, 'General', '')
+    list_drive(service, folder_id, result)
 
     files = pd.DataFrame(result)
     files.to_excel("data/links.xlsx")
