@@ -1,7 +1,8 @@
-import pandas, json
+import json
 from os import path
 
-x = pandas.read_excel("data/links.xlsx")
+with open("data/files.json") as f:
+    x = json.load(f)
 
 courses = path.join(path.dirname(path.realpath(__file__)), "courses.json")
 with open(courses) as f:
@@ -13,14 +14,12 @@ outfile = open("data/links.json","w")
 
 data = []
 
-for i in range(len(x.index)):
-    
-    id = x.loc[i]["id"]
-    name = x.loc[i]["name"]
-    mime = x.loc[i]["mimeType"]
-    tag = json.loads(x.loc[i]["tags"].replace("'",'"'))
+for file in x:
+    id = file["id"]
+    name = file["name"]
+    mime = file["mimeType"]
+    tag = file["tags"]
 
-    newEntry = [id, name, mime, tag]
     newtag = []
 
     typicalAncestors = []
@@ -53,8 +52,8 @@ for i in range(len(x.index)):
         if t not in typicalAncestors and t:
             newtag.append("other:"+t)
 
-    newEntry[-1] = newtag
-    data.append(newEntry)
+    file["tags"] = newtag
+    data.append(file)
 
 outfile.write(json.dumps(data))
 outfile.close()
