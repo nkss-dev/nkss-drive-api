@@ -1,4 +1,5 @@
 import json
+import db
 from os import path
 
 with open("data/files.json") as f:
@@ -10,9 +11,8 @@ with open(courses) as f:
 
 pptmimeList = ["application/vnd.ms-powerpoint","application/vnd.openxmlformats-officedocument.presentationml.presentation"]
 
-outfile = open("data/links.json","w")
-
 data = []
+db.connect("data/db.sqlite3")
 
 for file in x:
     id = file["id"]
@@ -52,8 +52,7 @@ for file in x:
         if t not in typicalAncestors and t:
             newtag.append("other:"+t)
 
-    file["tags"] = newtag
+    file = db.File(name = name, link=id, tags=newtag)
     data.append(file)
 
-outfile.write(json.dumps(data))
-outfile.close()
+db.add_files(data)
