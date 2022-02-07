@@ -1,8 +1,6 @@
 # import db
 from Google import connect_to_drive
-import pandas as pd
-import db
-
+import json
 
 def get_folder_contents(service, id):
 
@@ -66,8 +64,8 @@ def main():
 
     list_drive(service, folder_id, result)
 
-    files = pd.DataFrame(result)
-    files.to_excel("data/links.xlsx")
+    with open('./data/files.json', 'w') as outfile:
+        json.dump(result, outfile)
     pass
 
 
