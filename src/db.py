@@ -18,7 +18,7 @@ def list_files(tags: list[str]) -> list[File]:
         qs = ",".join(['?' for _ in tags])
 
         query = f"""
-            select f.name, f.drive_url, group_concat(t.name) as tags
+            select f.name, f.link, group_concat(t.name) as tags
             from (
                 select ft.fid
                 from file_tags ft
@@ -37,7 +37,7 @@ def list_files(tags: list[str]) -> list[File]:
         _cur.execute(query, params)
     else:
         query = f"""
-            select f.name, f.drive_url, group_concat(t.name) as tags
+            select f.name, f.link, group_concat(t.name) as tags
             from files f
             join file_tags ft on f.fid = ft.fid
             join tags t on ft.tid = t.tid
@@ -59,13 +59,13 @@ def add_files(files: list[File]):
     """
     
     for file in files:
-        query1 = "INSERT INTO files(name, drive_url) VALUES (?,?) RETURNING fid"
+        query1 = "INSERT INTO files(name, link) VALUES (?,?) RETURNING fid"
         _cur.execute(query1, [file.name, file.link])
         fid = _cur.fetchone()[0]
 
         for tag in file.tags:
             tid = get_tagid_or_insert(tag)
-            query2 = "INSERT INTO file_tags(tid,fid) VALUES (?,?)" 
+            query2 = "INSERT INTO file_tags(tid,fid) VALUES (?,?)"
             _cur.execute(query2, [tid, fid])
 
 
