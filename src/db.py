@@ -46,11 +46,7 @@ def list_files(tags: list[str]) -> list[File]:
         _cur.execute(query)
 
     results = _cur.fetchall()
-    files = []
-    for name, drive_url, ftags in results:
-        print(type(drive_url))
-        files.append(File(name=name, link=drive_url, tags=ftags.split(",")))
-    return files
+    return [File(name, link, tags.split(",")) for name, link, tags in results]
 
 
 def add_files(files: list[File]):
