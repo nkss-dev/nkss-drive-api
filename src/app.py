@@ -12,7 +12,10 @@ def files():
       tags = []
    else:
       tags = tags.split(",")    
-   return jsonify(db.list_files(tags))
+   response = jsonify(db.list_files(tags))
+   response.headers.add('Access-Control-Allow-Origin', '*')
+   return response
+
 
 
 if __name__ == "__main__":
